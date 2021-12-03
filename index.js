@@ -1,13 +1,11 @@
-const { application } = require('express')
 const express = require('express')
 const cors = require('cors')
 
 const app = express()
 
 app.use(cors())
-app.use(express.static('build'))
+// app.use(express.static('build'))
 app.use(express.json())
-
 
 
 let persons = [
@@ -58,15 +56,7 @@ app.get('/info', (request, response) => {
 app.get('/api/persons/:id', (request, response) => {
   const id = Number(request.params.id)
   const person = persons.find(person => person.id === id)
-  console.log(person)
   person ? response.json(person) : response.status(404).end()
-})
-
-app.delete('/api/persons/:id', (request, response) => {
-  const id = Number(request.params.id)
-  persons = persons.filter(person => person.id !== id)
-
-  response.status(204).end()
 })
 
 app.post('/api/persons', (request, response) => {
@@ -82,6 +72,20 @@ app.post('/api/persons', (request, response) => {
       error: 'The name already exists in the phonebook'
     })
   }
+
+app.put('/api/persons/:id', (request, response) => {
+  const id = Number(request.params.id)
+  const person = persons.find(person => person.id === id)
+  person.number = request.body.number
+  response.json(person)
+  response.status(204).end()
+})
+
+app.delete('/api/persons/:id', (request, response) => {
+  const id = Number(request.params.id)
+  persons = persons.filter(person => person.id !== id)
+  response.status(204).end()
+})
   
   const person = {
     id: generateId(),
@@ -93,8 +97,7 @@ app.post('/api/persons', (request, response) => {
   response.status(201).json(person)
 })
 
-
-const PORT =  process.env.PORT || 3001
+const PORT =  process.env.PORT || 3030
 app.listen(PORT, () => {
   console.log(`Server runing on ${PORT}`)
 })
