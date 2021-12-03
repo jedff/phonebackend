@@ -4,7 +4,7 @@ const cors = require('cors')
 const app = express()
 
 app.use(cors())
-pp.use(express.static('build'))
+app.use(express.static('build'))
 app.use(express.json())
 
 
